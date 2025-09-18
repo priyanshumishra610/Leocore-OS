@@ -1,0 +1,17 @@
+# Build artifacts
+*.o
+*.elf
+*.bin
+*.exe
+*.so
+*.dll
+
+# Rust
+/target/
+
+# Build directories
+/build/
+
+# IDEs
+/.vscode/
+/.idea/

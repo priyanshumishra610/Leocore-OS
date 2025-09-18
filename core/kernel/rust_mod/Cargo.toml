@@ -1,0 +1,15 @@
+[package]
+name = "leocore-kernel-mod"
+version = "0.0.1"
+authors = ["LeoCore Team"]
+edition = "2021"
+
+[lib]
+crate-type = ["staticlib"]
+path = "src/lib.rs"
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"

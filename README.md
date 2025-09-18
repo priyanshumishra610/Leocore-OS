@@ -1,6 +1,12 @@
 # LeoCore OS
 
 **LeoCore OS** is a futuristic, AI-native operating system designed to redefine how humans interact with technology. It integrates advanced artificial intelligence at the core, enabling self-healing, adaptive, and predictive behavior across all layers of the OS. LeoCore OS is modular, secure, privacy-first, and future-ready, making it a step ahead of traditional operating systems like Linux, Windows, and macOS.
+---
+
+## Phase 1
+
+Phase 1 delivers a minimal, GRUB-bootable kernel (C with future Rust modules), skeletons for AI and UI engines, scripts to build and run via QEMU, and docs outlining the vision and roadmap.
+
 
 ---
 
@@ -50,16 +56,29 @@ LeoCore OS is designed to be **AI-first, modular, secure, and adaptive**, ready 
 ```
 
 leocore-os/
-├── core/         # Kernel & OS modules
-├── drivers/      # Input/output and network drivers
-├── ai/           # Local and cloud AI modules
-├── ui/           # Adaptive UI/UX engine
-├── security/     # Encryption, blockchain, zero-trust modules
-├── apps/         # Universal app container & SDK
-├── resources/    # Icons, fonts, UI assets
-├── scripts/      # Build & automation scripts
-├── tests/        # Unit & integration tests
-├── docs/         # Vision, roadmap, and design docs
+├── core/
+│   ├── kernel/
+│   ├── bootloader/
+│   └── scheduler/
+├── drivers/
+│   ├── input/
+│   ├── display/
+│   └── network/
+├── ai/
+│   ├── agents/
+│   └── ml_integration/
+├── ui/
+│   ├── desktop/
+│   └── themes/
+├── security/
+├── apps/
+│   ├── containers/
+│   └── sdk/
+├── resources/
+├── scripts/
+├── tests/
+├── docs/
+├── .gitignore
 └── README.md
 
 ```
@@ -68,10 +87,10 @@ leocore-os/
 
 ## 🌐 Roadmap
 
-1. **Phase 1**: Minimal kernel + bootloader, basic AI modules, skeleton UI.  
+1. **Phase 1**: Minimal kernel + bootloader, basic AI modules, skeleton UI, docs and scripts.  
 2. **Phase 2**: Multi-modal input support, adaptive UI layouts, containerized apps.  
 3. **Phase 3**: Mesh networking, edge AI computation, BCI integration, holographic workspace.  
-4. **Phase 4**: Full self-healing kernel, blockchain identity, predictive AI agents, universal app optimization.
+4. **Phase 4**: Self-healing kernel, blockchain identity, predictive AI agents, universal app optimization.
 
 ---
 
