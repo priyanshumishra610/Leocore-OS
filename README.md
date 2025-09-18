@@ -7,6 +7,32 @@
 
 Phase 1 delivers a minimal, GRUB-bootable kernel (C with future Rust modules), skeletons for AI and UI engines, scripts to build and run via QEMU, and docs outlining the vision and roadmap.
 
+### Build
+
+```
+make            # builds kernel and ISO (if grub-mkrescue is installed)
+```
+
+### Run & Test
+
+```
+make run                # run with window
+make nographic          # headless (CI-friendly)
+make debug              # QEMU with -s -S for GDB
+```
+
+If ISO creation is unavailable, you can run directly:
+
+```
+qemu-system-x86_64 -kernel core/kernel/kernel.elf -serial stdio
+```
+
+### Requirements
+
+- x86_64-elf-gcc, x86_64-elf-ld
+- qemu-system-x86_64
+- grub-mkrescue (recommended) or GRUB toolchain with xorriso
+
 
 ---
 
