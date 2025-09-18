@@ -2,6 +2,14 @@
 
 > **“Not just another kernel. A seed of the future.”**
 
+
+[![ CI](https://github.com/priyanshumishra610/Leocore-OS/actions/workflows/phase1-ci.yml/badge.svg)](https://github.com/priyanshumishra610/Leocore-OS/actions/workflows/phase1-ci.yml)
+![Made with ❤️](https://img.shields.io/badge/made%20with-%E2%9D%A4-red)  
+![C](https://img.shields.io/badge/C-language-blue?logo=c)
+![Python](https://img.shields.io/badge/Python-3.11-yellow?logo=python)
+![License](https://img.shields.io/github/license/priyanshumishra610/Leocore-OS?color=purple)
+
+
 LeoCore OS is a **next-generation AI-native operating system**, designed from scratch to be **modular, adaptive, and alive**.
 Where Linux, Windows, and macOS evolved for the last century of computing, **LeoCore is born for the next**:
 brain-computer interfaces, holographic workspaces, quantum-inspired computation, and AI that coexists at the kernel level.
@@ -148,5 +156,15 @@ flowchart LR
     F --> G[LeoCore OS DNA Persists]
 ```
 ---
+## Creator  
+**Priyanshu Mishra**  
+*Visionary behind Leocore-OS*  
+ [GitHub](https://github.com/priyanshumishra610) 
+
+
+---
 # **LeoCore OS isn’t chasing the future. It’s built to live there.**
+
+
+
 
