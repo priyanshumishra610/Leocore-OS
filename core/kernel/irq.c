@@ -6,14 +6,16 @@
 #define PIC2_COMMAND 0xA0
 #define PIC_EOI      0x20
 
+extern void timer_tick(void);
+extern void ps2_handle_irq(void);
+
 void irq_handler_c(u32 irq_num) {
-	// Send EOI to PICs
 	if (irq_num >= 8) outb(PIC2_COMMAND, PIC_EOI);
 	outb(PIC1_COMMAND, PIC_EOI);
 
 	if (irq_num == 0) {
-		// timer tick
+		timer_tick();
 	} else if (irq_num == 1) {
-		// keyboard
+		ps2_handle_irq();
 	}
 }

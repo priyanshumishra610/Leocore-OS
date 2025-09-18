@@ -9,9 +9,9 @@ CFLAGS_COMMON := -ffreestanding -fno-stack-protector -fno-pic -m32 -Wall -Wextra
 ASFLAGS := -m32 -x assembler-with-cpp
 
 ifdef RELEASE
-	CFLAGS := $(CFLAGS_COMMON) -O2
+	CFLAGS := $(CFLAGS_COMMON) -O2 -DLEO_RELEASE=1
 else
-	CFLAGS := $(CFLAGS_COMMON) -O0 -g
+	CFLAGS := $(CFLAGS_COMMON) -O0 -g -DLEO_RELEASE=0
 endif
 
 LDFLAGS := -T linker.ld -nostdlib -melf_i386
@@ -24,13 +24,14 @@ SRCS_C = \
 	idt.c \
 	irq.c \
 	pic.c \
-	timer.c \
-	vga.c \
-	serial.c \
-	panic.c \
 	log.c \
+	panic.c \
 	mem/bump.c \
-	mem/kmalloc.c
+	mem/kmalloc.c \
+	../../drivers/timer.c \
+	../../drivers/vga.c \
+	../../drivers/serial.c \
+	../../drivers/input/ps2.c
 
 SRCS_S = \
 	gdt.S \

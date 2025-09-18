@@ -22,12 +22,39 @@ ISO_PATH="$BUILD_DIR/leocore-os.iso"
 
 need() { command -v "$1" >/dev/null 2>&1 || { echo "[!] Missing tool: $1"; exit 1; }; }
 
-# Check required tools
+# Required base tools
 need make
-need x86_64-elf-gcc
-need x86_64-elf-ld
+
+# Toolchain detection (prefer cross compilers; fall back to system gcc)
+CC_CHOSEN=${CC_CHOSEN-}
+LD_CHOSEN=${LD_CHOSEN-}
+
+find_tool() {
+	for t in "$@"; do
+		if command -v "$t" >/dev/null 2>&1; then echo "$t"; return 0; fi
+	done
+	printf "" # empty
+}
+
+if [ -z "${CC_CHOSEN}" ]; then
+	CC_CHOSEN=$(find_tool i686-elf-gcc i386-elf-gcc gcc)
+fi
+if [ -z "${LD_CHOSEN}" ]; then
+	LD_CHOSEN=$(find_tool i686-elf-ld i386-elf-ld ld)
+fi
+
+if [ -z "${CC_CHOSEN}" ] || [ -z "${LD_CHOSEN}" ]; then
+	echo "[!] Could not find a suitable compiler/linker (tried i686-elf-*, i386-elf-*, system)."; exit 1
+fi
+
+echo "[build] CC=${CC_CHOSEN} LD=${LD_CHOSEN}"
+if [ "${CC_CHOSEN}" = "gcc" ]; then
+	echo "[warn] Falling back to system gcc (-m32). Install a cross-compiler for reproducible builds."
+fi
+
+# Optional: ISO creation tools
 if ! command -v grub-mkrescue >/dev/null 2>&1; then
-	echo "[!] grub-mkrescue not found. ISO creation may fail on macOS without GRUB tools."
+	echo "[!] grub-mkrescue not found. ISO creation will be skipped. Use QEMU -kernel mode."
 fi
 
 mkdir -p "$BUILD_DIR" "$BOOT_DIR" "$GRUB_DIR"
@@ -35,7 +62,8 @@ mkdir -p "$BUILD_DIR" "$BOOT_DIR" "$GRUB_DIR"
 echo "[+] Building kernel (mode: $MODE)"
 KMODE=
 if [ "$MODE" = release ]; then KMODE=RELEASE=1; fi
-( cd "$ROOT_DIR/core/kernel" && make $KMODE )
+# Export chosen tools to sub-make (kernel Makefile has its own detection but honors env CC/LD when set)
+CC="$CC_CHOSEN" LD="$LD_CHOSEN" ( cd "$ROOT_DIR/core/kernel" && make $KMODE )
 
 if [ ! -f "$ROOT_DIR/core/kernel/kernel.elf" ]; then
 	echo "[!] kernel.elf not found after build"; exit 1

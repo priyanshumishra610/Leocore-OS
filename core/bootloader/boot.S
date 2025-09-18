@@ -1,7 +1,7 @@
 /*
  * LeoCore OS Boot Stub (Multiboot v1)
  * - Provides a Multiboot header for GRUB (32-bit protected mode).
- * - Transfers control to C entry (kernel_main).
+ * - Transfers control to C entry kernel_main(magic, mbi).
  */
 
 .set MULTIBOOT_MAGIC, 0x1BADB002
@@ -15,12 +15,15 @@
 .long MULTIBOOT_FLAGS
 .long MULTIBOOT_CHECKSUM
 
-/* Code entry point. GRUB jumps here. */
+/* Code entry point. GRUB jumps here with EAX=magic and EBX=mbi. */
 .section .text
 .global _start
 _start:
-	/* Call the C kernel entry. GRUB sets up a 32-bit environment. */
+	/* Push arguments (cdecl): push mbi, then magic */
+	push %ebx
+	push %eax
 	call kernel_main
+	add $8, %esp
 
 	/* If kernel_main returns, halt the CPU. */
 	hlt
