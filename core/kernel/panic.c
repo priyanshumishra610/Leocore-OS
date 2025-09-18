@@ -1,13 +1,13 @@
 #include "include/panic.h"
 #include "include/log.h"
 
-static inline void cli(void) { __asm__ volatile ("cli"); }
-static inline void hlt(void) { __asm__ volatile ("hlt"); }
+extern void cli_asm(void);
+extern void hlt_asm(void);
 
 void panic(const char* msg) {
-	cli();
+	cli_asm();
 	log_puts("\n[ PANIC ] ");
 	log_puts(msg);
 	log_puts("\nSystem halted.\n");
-	for (;;) hlt();
+	for (;;) hlt_asm();
 }

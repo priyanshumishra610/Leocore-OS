@@ -1,11 +1,11 @@
 # Kernel build (i386, Multiboot v1)
 
-# Try common cross-compilers, fallback to system gcc with -m32
-CC := $(firstword $(foreach c,i686-elf-gcc i386-elf-gcc gcc,$(if $(shell command -v $(c) 2>/dev/null),$(c),)))
-LD := $(firstword $(foreach c,i686-elf-ld i386-elf-ld ld,$(if $(shell command -v $(c) 2>/dev/null),$(c),)))
+# Try cross-compilers; allow environment CC/LD to override
+CC ?= $(firstword $(foreach c,i686-elf-gcc i386-elf-gcc gcc,$(if $(shell command -v $(c) 2>/dev/null),$(c),)))
+LD ?= $(firstword $(foreach c,i686-elf-ld i386-elf-ld ld,$(if $(shell command -v $(c) 2>/dev/null),$(c),)))
 AS := $(CC)
 
-CFLAGS_COMMON := -ffreestanding -fno-stack-protector -fno-pic -m32 -Wall -Wextra -Werror -nostdlib -nostartfiles -nodefaultlibs
+CFLAGS_COMMON := -ffreestanding -fno-stack-protector -fno-pic -m32 -Wall -Wextra -Werror -nostdlib -nodefaultlibs
 ASFLAGS := -m32 -x assembler-with-cpp
 
 ifdef RELEASE
@@ -14,12 +14,13 @@ else
 	CFLAGS := $(CFLAGS_COMMON) -O0 -g -DLEO_RELEASE=0
 endif
 
-LDFLAGS := -T linker.ld -nostdlib -melf_i386
+LDFLAGS := -T linker.ld -nostdlib -m elf_i386
 
 INCLUDE := -I include
 
 SRCS_C = \
 	main.c \
+	shell.c \
 	gdt.c \
 	idt.c \
 	irq.c \
@@ -34,9 +35,13 @@ SRCS_C = \
 	../../drivers/input/ps2.c
 
 SRCS_S = \
-	gdt.S \
+	gdt_flush.S \
 	irq_stub.S \
-	idt_load.S
+	idt_load.S \
+	cpu.S \
+	io.S \
+	interrupts.S \
+	../bootloader/boot.S
 
 OBJS := $(SRCS_C:.c=.o) $(SRCS_S:.S=.o)
 

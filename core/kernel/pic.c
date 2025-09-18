@@ -11,6 +11,9 @@
 #define ICW1_ICW4       0x01
 #define ICW4_8086       0x01
 
+extern void sti_asm(void);
+extern void cli_asm(void);
+
 void pic_remap(void) {
 	u8 a1 = inb(PIC1_DATA);
 	u8 a2 = inb(PIC2_DATA);
@@ -35,5 +38,5 @@ void pic_remap(void) {
 	outb(PIC2_DATA, a2);
 }
 
-void sti(void) { __asm__ volatile ("sti"); }
-void cli(void) { __asm__ volatile ("cli"); }
+void sti(void) { sti_asm(); }
+void cli(void) { cli_asm(); }

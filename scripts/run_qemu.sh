@@ -32,7 +32,7 @@ BUILD_DIR="$ROOT_DIR/build"
 ISO_PATH="$BUILD_DIR/leocore-os.iso"
 KERNEL_PATH="$ROOT_DIR/core/kernel/kernel.elf"
 
-QEMU_ARGS="-m 256 -serial stdio"
+QEMU_ARGS="-m 256"
 
 # Accelerator selection
 if [ "$ACCEL" = auto ]; then
@@ -43,7 +43,12 @@ if [ "$ACCEL" = hvf ] || [ "$ACCEL" = kvm ] || [ "$ACCEL" = tcg ]; then
 fi
 
 [ "$DEBUG" -eq 1 ] && QEMU_ARGS="$QEMU_ARGS -s -S"
-[ "$NOGRAPHIC" -eq 1 ] && QEMU_ARGS="$QEMU_ARGS -nographic"
+
+if [ "$NOGRAPHIC" -eq 1 ]; then
+	QEMU_ARGS="$QEMU_ARGS -nographic -serial mon:stdio -display none"
+else
+	QEMU_ARGS="$QEMU_ARGS -serial stdio"
+fi
 
 if [ "$MODE" = auto ]; then
 	if [ -f "$ISO_PATH" ]; then MODE=iso; else MODE=kernel; fi

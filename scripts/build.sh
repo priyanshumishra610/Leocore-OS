@@ -25,7 +25,7 @@ need() { command -v "$1" >/dev/null 2>&1 || { echo "[!] Missing tool: $1"; exit 
 # Required base tools
 need make
 
-# Toolchain detection (prefer cross compilers; fall back to system gcc)
+# Toolchain detection (prefer 32-bit cross compilers)
 CC_CHOSEN=${CC_CHOSEN-}
 LD_CHOSEN=${LD_CHOSEN-}
 
@@ -37,20 +37,21 @@ find_tool() {
 }
 
 if [ -z "${CC_CHOSEN}" ]; then
-	CC_CHOSEN=$(find_tool i686-elf-gcc i386-elf-gcc gcc)
+	CC_CHOSEN=$(find_tool i686-elf-gcc i386-elf-gcc x86_64-elf-gcc gcc)
 fi
 if [ -z "${LD_CHOSEN}" ]; then
-	LD_CHOSEN=$(find_tool i686-elf-ld i386-elf-ld ld)
+	LD_CHOSEN=$(find_tool i686-elf-ld i386-elf-ld x86_64-elf-ld ld)
 fi
 
 if [ -z "${CC_CHOSEN}" ] || [ -z "${LD_CHOSEN}" ]; then
-	echo "[!] Could not find a suitable compiler/linker (tried i686-elf-*, i386-elf-*, system)."; exit 1
+	echo "[!] Could not find a suitable compiler/linker (tried i686-elf, i386-elf, x86_64-elf, system)."; exit 1
 fi
 
 echo "[build] CC=${CC_CHOSEN} LD=${LD_CHOSEN}"
-if [ "${CC_CHOSEN}" = "gcc" ]; then
-	echo "[warn] Falling back to system gcc (-m32). Install a cross-compiler for reproducible builds."
-fi
+case "$CC_CHOSEN" in
+	gcc) echo "[warn] Falling back to system gcc (-m32). Install a cross-compiler for reproducible builds.";;
+	*) : ;;
+ esac
 
 # Optional: ISO creation tools
 if ! command -v grub-mkrescue >/dev/null 2>&1; then
@@ -62,8 +63,8 @@ mkdir -p "$BUILD_DIR" "$BOOT_DIR" "$GRUB_DIR"
 echo "[+] Building kernel (mode: $MODE)"
 KMODE=
 if [ "$MODE" = release ]; then KMODE=RELEASE=1; fi
-# Export chosen tools to sub-make (kernel Makefile has its own detection but honors env CC/LD when set)
-CC="$CC_CHOSEN" LD="$LD_CHOSEN" ( cd "$ROOT_DIR/core/kernel" && make $KMODE )
+# Export chosen tools via env and build in kernel dir
+env CC="$CC_CHOSEN" LD="$LD_CHOSEN" make -C "$ROOT_DIR/core/kernel" $KMODE
 
 if [ ! -f "$ROOT_DIR/core/kernel/kernel.elf" ]; then
 	echo "[!] kernel.elf not found after build"; exit 1
