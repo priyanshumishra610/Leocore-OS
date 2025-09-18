@@ -1,6 +1,6 @@
 /*
  * LeoCore OS Boot Stub (Multiboot v1)
- * - Provides a Multiboot header for GRUB to load this kernel at 32-bit protected mode.
+ * - Provides a Multiboot header for GRUB (32-bit protected mode).
  * - Transfers control to C entry (kernel_main).
  */
 

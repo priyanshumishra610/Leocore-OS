@@ -34,7 +34,8 @@ SRCS_C = \
 
 SRCS_S = \
 	gdt.S \
-	irq_stub.S
+	irq_stub.S \
+	idt_load.S
 
 OBJS := $(SRCS_C:.c=.o) $(SRCS_S:.S=.o)
 

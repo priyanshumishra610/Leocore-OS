@@ -1,0 +1,22 @@
+name: Phase1 CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qemu-system-x86 xorriso grub-pc-bin mtools build-essential gcc-multilib
+      - name: Build
+        run: |
+          make
+      - name: Run headless (smoke)
+        run: |
+          timeout 10s ./scripts/run_qemu.sh --nographic || true
