@@ -1,0 +1,21 @@
+# Jarvis Configuration File
+# Phase 3.0 - Plugin System
+
+ollama:
+  url: "http://localhost:11434/api/generate"
+  model: "llama3.1"
+  timeout: 30
+
+session:
+  capacity: 10
+  persist_path: ""
+
+plugins:
+  directory: "plugins"
+  dev_mode: false
+  hot_reload: false
+
+security:
+  safe_mode: false
+  command_whitelist: []
+  audit_log: "logs/jarvis_audit.log"

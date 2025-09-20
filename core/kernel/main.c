@@ -9,6 +9,9 @@
 #include "include/pic.h"
 #include "include/timer.h"
 #include "include/mem.h"
+#include "include/mem_paging.h"
+#include "include/task.h"
+#include "include/keyboard.h"
 #include "include/cpu.h"
 #include "include/multiboot.h"
 
@@ -60,12 +63,14 @@ static void kernel_init(const multiboot_info_t* mbi) {
 	log_init();
 	vga_set_color(VGA_LIGHT_GREY, VGA_BLACK);
 
-	gdt_init();
-	idt_init();
-	pic_remap();
-	timer_init(100);
-	kmalloc_init();
-	ps2_init();
+    gdt_init();
+    idt_init();
+    pic_remap();
+    timer_init(100);
+    kmalloc_init();
+    paging_init();
+    scheduler_init();
+    keyboard_init();
 	sti();
 
 	print_banner(mbi);

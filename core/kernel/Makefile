@@ -21,6 +21,7 @@ INCLUDE := -I include
 SRCS_C = \
 	main.c \
 	shell.c \
+	syscalls.c \
 	gdt.c \
 	idt.c \
 	irq.c \
@@ -29,6 +30,9 @@ SRCS_C = \
 	panic.c \
 	mem/bump.c \
 	mem/kmalloc.c \
+	mem/paging.c \
+	task/scheduler.c \
+	drivers/keyboard.c \
 	../../drivers/timer.c \
 	../../drivers/vga.c \
 	../../drivers/serial.c \

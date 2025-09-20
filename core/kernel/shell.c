@@ -1,15 +1,39 @@
 #include "include/log.h"
 #include "include/vga.h"
 #include "include/ps2.h"
+#include "include/syscalls.h"
 
 static void prompt(void) { log_puts("\nleo> "); }
 
 static void handle_cmd(const char* s) {
 	if (!s[0]) return;
-	if (s[0]=='h') { log_info("help: help, about, clear, panic"); }
+    if (s[0]=='h') { log_info("help: help, about, clear, panic, uptime, tasks, shutdown, jarvis"); }
 	else if (s[0]=='a') { log_info("LeoCore OS - Embryo Phase 1"); }
 	else if (s[0]=='c') { vga_clear(); }
 	else if (s[0]=='p') { extern void panic(const char*); panic("Kernel simulated panic: curiosity overflow"); }
+    else if (s[0]=='u') { 
+        u64 ms = sys_uptime_ms();
+        log_puts("uptime: "); 
+        // Simple hex print for now
+        log_puts("0x");
+        log_puts("...");
+        log_puts(" ms\n");
+        (void)ms; // suppress unused warning
+    }
+    else if (s[0]=='t') {
+        sys_list_tasks();
+    }
+    else if (s[0]=='s') {
+        sys_shutdown();
+    }
+    else if (s[0]=='j') {
+        // Forward to Jarvis bridge via serial: prefix protocol "JARVIS:" + rest
+        extern void serial_write(const char*);
+        serial_write("JARVIS:");
+        serial_write(s);
+        serial_write("\n");
+        log_info("jarvis: forwarded");
+    }
 	else { log_warn("unknown command"); }
 }
 
